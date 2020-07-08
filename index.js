@@ -25,27 +25,48 @@ app.use(function validateBearerToken(req, res, next){
   next();
 });
     
-const validTypes = ['genre','country','ave_vote'];
-
-
-
-
-
-
 app.get('/movie' , (req, res) => {
+  /*grabs query */
+  const { avg_vote , genre , country  } = req.query;
+  /* filters out B.S. */
+  //   if(!avg_vote && !genre  && !country){
+  //     return res.status(418).send(' idk what you looking for but we don\'t have it 😃');
+  //   }
 
-  const { ave_vote , genre , country  } = req.query;
-
-  if(!ave_vote && !genre  && !country){
-    return res.send(' idk what you looking for but we don\'t have it 😃');
+  for( let p in req.query){
+    if(p !== 'avg_vote' && p !== 'genre' && p !== 'country' ){
+      return res.status(418).send(' idk what you looking for but we don\'t have it 😃');
+    }
   }
-  if(ave_vote){
-    let results = movies.filter(mov => 
-      mov.avg_vote <=  Number(ave_vote)
+
+  let results = movies;
+
+
+  if(avg_vote){
+    results = results.filter(mov => 
+      mov.avg_vote >=  Number(avg_vote)
     );
-    results.sort((a,b) => {return a[ave_vote] > b[ave_vote] ? 1 : a[ave_vote] < b[ave_vote] ?  -1 : 0 ; });
+    results.sort((a,b) => {return a[avg_vote] > b[avg_vote] ? 1 : a[avg_vote] < b[avg_vote] ?  -1 : 0 ; });
   }
+
+  if (genre){
+    results = results.filter(mov=> mov.genre.toLowerCase().includes(genre.toLowerCase())); 
+  }
+  
+  if(country){
+    results = results.filter(mov=> mov.country.toLowerCase().includes(country.toLowerCase())); 
+
+  }
+  
+  if(results.length === 0){
+    res.status(418).send('sorry we can\'t find anything :c');
+  }else{
+    res.json(results).status(200).send();  
+  }
+
+  
+
 });
 
 
-app.listen(8000, ()=> console.log('server is running on port 8000'));
+app.listen(8000, ()=> console.log('server is running on port 8000') );
