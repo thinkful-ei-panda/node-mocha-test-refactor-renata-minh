@@ -18,5 +18,14 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkful-ei-panda/movie-api-gage-renata.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/thinkful-ei-panda/movie-api-gage-renata/issues"
+  },
+  "homepage": "https://github.com/thinkful-ei-panda/movie-api-gage-renata#readme"
 }
